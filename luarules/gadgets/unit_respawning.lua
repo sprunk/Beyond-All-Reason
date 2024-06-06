@@ -248,8 +248,6 @@ if gadgetHandler:IsSyncedCode() then
 else
 
 
-	local spSelectUnitArray = Spring.SelectUnitArray
-	local spGetSelectedUnits = Spring.GetSelectedUnits
 	local spGetGameSeconds = Spring.GetGameSeconds
 
 	local announcementStart = 0
