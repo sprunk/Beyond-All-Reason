@@ -893,10 +893,10 @@ local function menuHandler(x, y, button)
 			Spring.GiveOrderToUnit(factoryUnitID, CMD.REPEAT, onoff, 0)
 			Spring.PlaySoundFile(sound_click, 0.8, 'ui')
 		else
-			Spring.SelectUnitArray({ factoryUnitID })
+			Spring.SelectUnit(factoryUnitID)
 		end
 	elseif button == 3 then
-		Spring.SelectUnitArray({ factoryUnitID })
+		Spring.SelectUnit(factoryUnitID)
 		Spring.SetCameraTarget( Spring.GetUnitPosition(factoryUnitID) )
 	end
 
