@@ -313,7 +313,6 @@ if gadgetHandler:IsSyncedCode() then
 else
 
 
-	local spGetSelectedUnits = Spring.GetSelectedUnits
 	local spGetGameSeconds = Spring.GetGameSeconds
 
 	local announcementStart = 0
@@ -346,7 +345,6 @@ else
 	end
 
 	local function EvolveFinished(cmd, oldID, newID, newAnnouncement, newAnnouncementSize)
-		local selUnits = spGetSelectedUnits()
 		local unitGroup = Spring.GetUnitGroup(oldID)
 		if unitGroup then
 			Spring.SetUnitGroup(newID, unitGroup)
