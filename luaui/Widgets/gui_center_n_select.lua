@@ -33,7 +33,7 @@ function widget:Update()
     if (go and unitArray[1]) then
       local x, y, z = Spring.GetUnitPosition(unitArray[1])
       Spring.SetCameraTarget(x, y, z)
-      Spring.SelectUnitArray{unitArray[1]}
+      Spring.SelectUnit(unitArray[1])
       go = false
     end
     if (not go) then
