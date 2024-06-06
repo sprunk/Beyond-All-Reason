@@ -1661,7 +1661,7 @@ local function LeftMouseButton(unitDefID, unitTable)
 		-- select units of icon type
 		if alt or meta then
 			acted = true
-			spSelectUnitArray({ unitTable[1] })  -- only 1
+			Spring.SelectUnit(unitTable[1])  -- only 1
 		else
 			acted = true
 			spSelectUnitArray(unitTable)
