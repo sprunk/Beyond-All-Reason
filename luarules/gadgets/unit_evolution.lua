@@ -313,7 +313,6 @@ if gadgetHandler:IsSyncedCode() then
 else
 
 
-	local spSelectUnitArray = Spring.SelectUnitArray
 	local spGetSelectedUnits = Spring.GetSelectedUnits
 	local spGetGameSeconds = Spring.GetGameSeconds
 
@@ -352,13 +351,8 @@ else
 		if unitGroup then
 			Spring.SetUnitGroup(newID, unitGroup)
 		end
-		for i=1,#selUnits do
-		  local unitID = selUnits[i]
-		  if (unitID == oldID) then
-			selUnits[i] = newID
-			spSelectUnitArray(selUnits)
-			break
-		  end
+		if Spring.IsUnitSelected(oldID) then
+			Spring.SelectUnit(newID, true)
 		end
 		if newAnnouncement then
 			announcement = newAnnouncement
