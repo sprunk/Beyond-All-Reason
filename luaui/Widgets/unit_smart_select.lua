@@ -127,7 +127,7 @@ function widget:SelectionChanged(sel)
 			-- pressed, user is selected empty space
 			-- we must clear selection to disambiguate from our own deselect modifier
 			selectedUnits = {}
-			spSelectUnitArray({})
+			spSelectUnitArray(selectedUnits)
 		else
 			-- we also want to override back from engine selection to our selection
 			spSelectUnitArray(selectedUnits)
