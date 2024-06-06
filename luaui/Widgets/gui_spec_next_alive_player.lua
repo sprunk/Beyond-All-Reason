@@ -14,7 +14,7 @@ local processTeamDiedFrame, processTeamDiedTeamID
 
 local function switchToTeam(teamID)
 	local oldMapDrawMode = Spring.GetMapDrawMode()
-	Spring.SelectUnitArray({})
+	Spring.SelectUnit(nil)
 	Spring.SendCommands('specteam ' .. teamID)
 	local newMapDrawMode = Spring.GetMapDrawMode()
 	if oldMapDrawMode == 'los' and oldMapDrawMode ~= newMapDrawMode then
