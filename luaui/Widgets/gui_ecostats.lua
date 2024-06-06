@@ -1219,7 +1219,7 @@ function widget:MousePress(x, y, button)
 
 							Spring.SetCameraState(camState, 0.75)
 							if inSpecMode then
-								Spring.SelectUnitArray({ com })
+								Spring.SelectUnit(com)
 							end
 						elseif cx then
 							Spring.SetCameraTarget(cx, cy, cz, 0.5)
