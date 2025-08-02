@@ -104,6 +104,10 @@ local modrules = {
 		pfHcostMult = 0.2,				-- default: 0.2.  A float value between 0 and 2. Controls how aggressively the pathing search prioritizes nodes going in the direction of the goal. Higher values mean pathing is cheaper, but can start producing degenerate paths where the unit goes straight at the goal and then has to hug a wall.
 	},
 
+	gameStart = {
+		useStartPositionSelecter = false, -- Disable the start position selector in the Recoil Engine so we can do it with widgets instead.
+	},
+
 	transportability = {
 		transportAir = false,	-- Can aircraft be transported?
 		transportShip = false,	-- Can ships be transported?

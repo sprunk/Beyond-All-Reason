@@ -731,7 +731,7 @@ function widget:GameSetup(state, ready, playerStates)
 
 end
 
-function widget:MousePress(sx, sy)
+function widget:MousePress(sx, sy, button)
 	if showLockButton then
 
 		-- pressing button element
@@ -788,11 +788,49 @@ function widget:MousePress(sx, sy)
 			end
 			return true
 		end
+	end
 
+	-- requesting to place start position (while avoiding interference with pregame building)
+	if button == 1 and (WG["pregame-build"] == nil or WG["pregame-build"].getPreGameDefID() == nil) then
+		-- Get world coordinates from mouse click position
+		local _, coords = Spring.TraceScreenRay(sx, sy, true)
+		if coords then
+			local x, z = coords[1], coords[3]
+			local y = Spring.GetGroundHeight(x, z)
+			local facing = 0  -- Default facing direction
+			local message = string.format("requestStartPosition %d %d %d %.1f", x, y, z, facing)
+			Spring.SendLuaRulesMsg(message)
+		end
+		return true
 	end
 end
 
-function widget:MouseRelease(sx, sy)
+function widget:MouseMove(sx, sy)
+	-- Calculate radians for delta between current start position and release point
+	if not mySpec then
+		-- Get current team start position
+		local x, y, z = Spring.GetTeamStartPosition(myTeamID)
+		if x and x > 0 and z and z > 0 then
+			-- Get world coordinates from mouse release position
+			local _, coords = Spring.TraceScreenRay(sx, sy, true)
+			if coords then
+				local releaseX, releaseZ = coords[1], coords[3]
+
+				-- Calculate delta
+				local deltaX = releaseX - x
+				local deltaZ = releaseZ - z
+
+				-- Calculate radians (angle from start position to release point)
+				-- Adjust so that: South=0, North=π, West=-π/2, East=π/2
+				local radians = math.atan2(deltaX, deltaZ)
+
+				-- Send radians to LuaRules
+				local message = string.format("requestStartFacing %.1f", radians)
+				Spring.SendLuaRulesMsg(message)
+			end
+		end
+	end
+
 	return false
 end
 
@@ -991,14 +1029,16 @@ function widget:DrawWorld()
 	for i = 1, #teamList do
 		local teamID = teamList[i]
 		local tsx, tsy, tsz = Spring.GetTeamStartPosition(teamID)
+		local tsf = Spring.GetTeamRulesParam(teamID, 'comStartFacing') or 0
+
 		if tsx and tsx > 0 then
 			local startUnitDefID = Spring.GetTeamRulesParam(teamID, 'startUnit')
 			if startUnitDefID then
-				id = startUnitDefID..'_'..tsx..'_'..Spring.GetGroundHeight(tsx, tsz)..'_'..tsz
+				id = startUnitDefID..'_'..tsx..'_'..Spring.GetGroundHeight(tsx, tsz)..'_'..tsz..'_'..tsf
 				if teamStartPositions[teamID] ~= id then
 					removeUnitShape(teamStartPositions[teamID])
 					teamStartPositions[teamID] = id
-					addUnitShape(id, startUnitDefID, tsx, Spring.GetGroundHeight(tsx, tsz), tsz, 0, teamID, 1)
+					addUnitShape(id, startUnitDefID, tsx, Spring.GetGroundHeight(tsx, tsz), tsz, tsf, teamID, 1)
 				end
 			end
 		end
