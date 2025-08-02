@@ -4,11 +4,12 @@ function gadget:GetInfo()
 	return {
 		name = 'Initial Spawn',
 		desc = 'Handles initial spawning of units',
-		author = 'Niobium, nbusseneau',
+		author = 'Niobium, nbusseneau, Wybren Koelmans',
 		version = 'v2.0',
 		date = 'April 2011',
 		license = 'GNU GPL, v2 or later',
 		layer = 0,
+		handler = true,
 		enabled = true
 	}
 end
@@ -315,8 +316,12 @@ if gadgetHandler:IsSyncedCode() then
 				local _, _, _, teamID = Spring.GetPlayerInfo(playerID, false)
 				if teamID then
 					local readyState = Spring.GetGameRulesParam("player_" .. playerID .. "_readyState")
-					if readyState == 0 or readyState == 4 then -- only allow placing startpos if not yet placed or forcibly readied
-						Spring.SetTeamStartPosition(playerID, teamID, readyState, x, y, z)
+					if readyState == 0 or readyState == 4 then -- only allow placing startpos if not yet placed or forcibly readied (FIXME doesn't that mean the first placed point is the final one?)
+						-- looks valid, but let's ask gadgets
+						local allowed = gadgetHandler:AllowStartPosition(playerID, teamID, readyState, x, y, z)
+						if allowed then
+							Spring.SetTeamStartPosition(playerID, teamID, readyState, x, y, z)
+						end
 					end
 				end
 			end
@@ -663,7 +668,7 @@ else -- UNSYNCED
 	end
 
 	function gadget:Initialize()
-		gadgetHandler:AddSyncAction("PositionTooClose", positionTooClose)
+		gadgetHandler.actionHandler.AddSyncAction(self, "PositionTooClose", positionTooClose)
 	end
 
 	function gadget:GameFrame(n)
@@ -676,7 +681,6 @@ else -- UNSYNCED
 	end
 
 	function gadget:Shutdown()
-		gadgetHandler:RemoveSyncAction("PositionTooClose")
-
+		gadgetHandler.actionHandler.RemoveSyncAction(self, "PositionTooClose")
 	end
 end
