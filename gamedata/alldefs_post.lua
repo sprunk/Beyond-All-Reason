@@ -208,6 +208,7 @@ end
 -------------------------
 
 local function unitDef_Post(name, uDef)
+	uDef.myGravity = 123
 	local isScav = string.sub(name, -5, -1) == "_scav"
 	local basename = isScav and string.sub(name, 1, -6) or name
 	local customparams = uDef.customparams
@@ -1000,6 +1001,7 @@ end
 
 -- process weapondef
 local function weaponDef_Post(name, wDef)
+	wDef.myGravity = 456
 	local customparams = wDef.customparams
 	local damage = wDef.damage
 	local shield = wDef.shield
